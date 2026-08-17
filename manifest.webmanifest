@@ -1,12 +1,11 @@
 {
-  "id": "/",
+  "id": "/SLS-pwa-assets/",
   "name": "SLS",
   "short_name": "SLS",
   "description": "SLS Work System · Crafted by Matua",
-  "start_url": "./index.html",
+  "start_url": "./index.html?v=35.4",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait-primary",
   "background_color": "#080809",
   "theme_color": "#080809",
   "icons": [

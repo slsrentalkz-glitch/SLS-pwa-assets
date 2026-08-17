@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1, viewport-fit=cover"
@@ -16,14 +17,27 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#080809">
 
-  <!-- v35.3: browser cache protection -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
 
-  <link rel="apple-touch-icon" sizes="180x180" href="./sls-icon-180.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="./sls-icon-192.png">
-  <link rel="manifest" href="./manifest.webmanifest">
+  <link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="./sls-icon-180.png"
+  >
+
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="192x192"
+    href="./sls-icon-192.png"
+  >
+
+  <link
+    rel="manifest"
+    href="./manifest.webmanifest"
+  >
 
   <style>
     html,
@@ -37,44 +51,31 @@
     }
 
     body {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:
+        env(safe-area-inset-top)
+        env(safe-area-inset-right)
+        env(safe-area-inset-bottom)
+        env(safe-area-inset-left);
+      box-sizing:border-box;
       font-family:
         -apple-system,
         BlinkMacSystemFont,
         "Segoe UI",
         Arial,
         sans-serif;
-    }
-
-    #splash {
-      position:fixed;
-      inset:0;
-      z-index:2;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:18px;
-      background:
-        radial-gradient(
-          circle at 50% 30%,
-          rgba(201,168,106,.16),
-          transparent 36%
-        ),
-        #080809;
       color:#e8d2a1;
-      transition:
-        opacity .28s ease,
-        visibility .28s ease;
     }
 
-    #splash.hidden {
-      opacity:0;
-      visibility:hidden;
-      pointer-events:none;
+    .launcher {
+      width:min(86vw, 360px);
+      text-align:center;
     }
 
     .logo {
-      width:min(42vw, 180px);
+      width:min(42vw, 170px);
       aspect-ratio:1;
       object-fit:cover;
       border-radius:26%;
@@ -83,58 +84,70 @@
         0 0 38px rgba(201,168,106,.10);
     }
 
-    .brand {
-      text-align:center;
-    }
-
     .brand-main {
+      margin-top:18px;
+      padding-left:8px;
       font-size:24px;
       font-weight:900;
       letter-spacing:8px;
-      padding-left:8px;
     }
 
     .brand-sub {
       margin-top:8px;
-      font-size:9px;
-      font-weight:700;
-      letter-spacing:3px;
       color:#a98d5a;
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:3px;
     }
 
     .made {
       margin-top:5px;
+      color:#77736b;
       font-size:8px;
       letter-spacing:2px;
-      color:#77736b;
     }
 
     .loader {
       width:34px;
       height:34px;
-      margin-top:6px;
+      margin:22px auto 0;
       border-radius:50%;
       border:2px solid rgba(201,168,106,.18);
       border-top-color:#d5b36f;
       animation:spin .8s linear infinite;
     }
 
-    @keyframes spin {
-      to { transform:rotate(360deg); }
+    .status {
+      margin-top:14px;
+      color:#8f8b82;
+      font-size:9px;
+      line-height:1.45;
     }
 
-    #appFrame {
-      position:fixed;
-      inset:0;
+    .open-button {
       width:100%;
-      height:100%;
-      border:0;
-      background:#080809;
+      min-height:44px;
+      margin-top:18px;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      border-radius:14px;
+      border:1px solid rgba(201,168,106,.25);
+      background:rgba(201,168,106,.10);
+      color:#e4c987;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.5px;
+      cursor:pointer;
     }
 
-    @supports (height: 100dvh) {
-      #appFrame {
-        height:100dvh;
+    .open-button.show {
+      display:flex;
+    }
+
+    @keyframes spin {
+      to {
+        transform:rotate(360deg);
       }
     }
   </style>
@@ -142,79 +155,108 @@
 
 <body>
 
-  <div id="splash">
+  <main class="launcher">
+
     <img
       class="logo"
       src="./sls-icon-512.png"
       alt="SLS"
     >
 
-    <div class="brand">
-      <div class="brand-main">SLS</div>
-      <div class="brand-sub">WORK SYSTEM</div>
-      <div class="made">CRAFTED BY MATUA</div>
+    <div class="brand-main">
+      SLS
+    </div>
+
+    <div class="brand-sub">
+      WORK SYSTEM
+    </div>
+
+    <div class="made">
+      CRAFTED BY MATUA · v35.4
     </div>
 
     <div class="loader"></div>
 
-    <button
-      id="launcherReloadButton"
-      type="button"
-      style="
-        margin-top:8px;
-        padding:10px 14px;
-        border-radius:12px;
-        border:1px solid rgba(201,168,106,.20);
-        background:rgba(201,168,106,.07);
-        color:#d8ba7a;
-        font-size:9px;
-        font-weight:900;
-        letter-spacing:.7px;
-      "
-      onclick="hardReloadLauncher()"
+    <div
+      id="status"
+      class="status"
     >
-      ОБНОВИТЬ ПРИЛОЖЕНИЕ
-    </button>
-  </div>
+      Открываем рабочую систему...
+    </div>
 
-  <iframe
-    id="appFrame"
-    src="about:blank"
-    allow="clipboard-read; clipboard-write"
-    referrerpolicy="no-referrer-when-downgrade"
-  ></iframe>
+    <button
+      id="openButton"
+      class="open-button"
+      type="button"
+      onclick="openSlsDirect()"
+    >
+      ОТКРЫТЬ SLS WORKS
+    </button>
+
+  </main>
+
 
   <script>
-    const frame =
-      document.getElementById('appFrame');
-
     const APP_URL =
       'https://script.google.com/macros/s/AKfycbzpM52b7oy1dqKWaTiSPB8iHgpzBG9pa30m8KlZrXpllLYnbCs6tuGqE6srlJljamJq/exec';
 
     const LAUNCHER_VERSION =
-      '35.3';
-
-    const VERSION_FILE =
-      './version.json';
+      '35.4';
 
 
-    async function ensureFreshLauncher() {
+    function buildDirectUrl() {
+
+      const separator =
+        APP_URL.includes('?')
+          ? '&'
+          : '?';
+
+
+      return (
+        APP_URL +
+        separator +
+        'sls_version=' +
+        encodeURIComponent(
+          LAUNCHER_VERSION
+        ) +
+        '&ts=' +
+        Date.now()
+      );
+    }
+
+
+    function openSlsDirect() {
+
+      /*
+       * КЛЮЧЕВОЕ ИЗМЕНЕНИЕ v35.4:
+       * Apps Script открывается как верхняя страница,
+       * а не внутри iframe.
+       *
+       * Это устраняет проблему Яндекс.Браузера /
+       * Google preview / Google Drive redirect.
+       */
+      window.location.replace(
+        buildDirectUrl()
+      );
+    }
+
+
+    async function checkLauncherVersion() {
 
       try {
 
         const response =
           await fetch(
-            VERSION_FILE +
-            '?ts=' +
+            './version.json?ts=' +
             Date.now(),
             {
-              cache: 'no-store'
+              cache:'no-store'
             }
           );
 
 
         if (!response.ok) {
-          return;
+          return true;
         }
 
 
@@ -235,148 +277,93 @@
 
 
         const urlVersion =
-          params.get(
-            'v'
-          ) || '';
+          params.get('v') || '';
 
 
-        /*
-         * Если GitHub уже опубликовал новую версию,
-         * но браузер держит старый index.html,
-         * открываем этот же launcher с новым ?v=...
-         * Это заставляет браузер запросить новый документ.
-         */
         if (
           serverVersion &&
           serverVersion !==
             urlVersion
         ) {
 
-          const nextUrl =
+          window.location.replace(
             window.location.pathname +
             '?v=' +
             encodeURIComponent(
               serverVersion
             ) +
             '&ts=' +
-            Date.now();
-
-
-          window.location.replace(
-            nextUrl
+            Date.now()
           );
 
 
-          return new Promise(
-            () => {}
-          );
+          return false;
         }
 
       } catch (error) {
 
         console.warn(
-          'SLS version check failed',
+          'Version check failed',
           error
         );
       }
+
+
+      return true;
     }
 
 
-    function loadFreshSls() {
+    async function startLauncher() {
 
-      const separator =
-        APP_URL.includes('?')
-          ? '&'
-          : '?';
+      const ready =
+        await checkLauncherVersion();
 
 
-      frame.src =
-        APP_URL +
-        separator +
-        'sls_version=' +
-        encodeURIComponent(
-          LAUNCHER_VERSION
-        ) +
-        '&ts=' +
-        Date.now();
-    }
+      if (!ready) {
+        return;
+      }
 
 
-    async function startSlsLauncher() {
-
-      await ensureFreshLauncher();
-
-      loadFreshSls();
-    }
-
-
-    startSlsLauncher();
-
-
-    const splash =
-      document.getElementById('splash');
-
-    function hideSplash() {
-      splash.classList.add('hidden');
-    }
-
-    function hardReloadLauncher() {
-
-      const url =
-        window.location.pathname +
-        '?v=' +
-        encodeURIComponent(
-          LAUNCHER_VERSION
-        ) +
-        '&force=' +
-        Date.now();
+      /*
+       * Небольшая задержка нужна только чтобы пользователь
+       * увидел фирменную заставку, после чего открываем Apps Script.
+       */
+      setTimeout(
+        openSlsDirect,
+        450
+      );
 
 
-      window.location.replace(
-        url
+      /*
+       * Если браузер заблокировал автоматический переход,
+       * появляется обычная кнопка.
+       */
+      setTimeout(
+        () => {
+
+          document
+            .getElementById(
+              'status'
+            )
+            .textContent =
+              'Если SLS WORKS не открылся автоматически — нажмите кнопку ниже.';
+
+
+          document
+            .getElementById(
+              'openButton'
+            )
+            .classList.add(
+              'show'
+            );
+
+        },
+        3200
       );
     }
 
 
-    frame.addEventListener(
-      'load',
-      () => {
-        setTimeout(
-          hideSplash,
-          450
-        );
-      }
-    );
-
-    /*
-     * Страховка на случай, если iframe уже загрузился,
-     * но мобильный браузер не прислал load вовремя.
-     */
-    setTimeout(
-      hideSplash,
-      6500
-    );
-
-    let hiddenAt = 0;
-
-    document.addEventListener(
-      'visibilitychange',
-      () => {
-        if (document.visibilityState === 'hidden') {
-          hiddenAt = Date.now();
-          return;
-        }
-
-        if (
-          hiddenAt &&
-          Date.now() - hiddenAt > 15000
-        ) {
-
-          startSlsLauncher();
-        }
-      }
-    );
-
+    startLauncher();
   </script>
 
 </body>

@@ -1,5 +1,6 @@
 {
-  "version": "35.3",
+  "version": "35.4",
   "updated": "2026-08-18",
+  "architecture": "direct-launcher",
   "app": "SLS WORK SYSTEM"
 }
