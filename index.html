@@ -16,6 +16,11 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#080809">
 
+  <!-- v35.3: browser cache protection -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
   <link rel="apple-touch-icon" sizes="180x180" href="./sls-icon-180.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./sls-icon-192.png">
   <link rel="manifest" href="./manifest.webmanifest">
@@ -151,6 +156,25 @@
     </div>
 
     <div class="loader"></div>
+
+    <button
+      id="launcherReloadButton"
+      type="button"
+      style="
+        margin-top:8px;
+        padding:10px 14px;
+        border-radius:12px;
+        border:1px solid rgba(201,168,106,.20);
+        background:rgba(201,168,106,.07);
+        color:#d8ba7a;
+        font-size:9px;
+        font-weight:900;
+        letter-spacing:.7px;
+      "
+      onclick="hardReloadLauncher()"
+    >
+      ОБНОВИТЬ ПРИЛОЖЕНИЕ
+    </button>
   </div>
 
   <iframe
@@ -167,14 +191,127 @@
     const APP_URL =
       'https://script.google.com/macros/s/AKfycbzpM52b7oy1dqKWaTiSPB8iHgpzBG9pa30m8KlZrXpllLYnbCs6tuGqE6srlJljamJq/exec';
 
+    const LAUNCHER_VERSION =
+      '35.3';
+
+    const VERSION_FILE =
+      './version.json';
+
+
+    async function ensureFreshLauncher() {
+
+      try {
+
+        const response =
+          await fetch(
+            VERSION_FILE +
+            '?ts=' +
+            Date.now(),
+            {
+              cache: 'no-store'
+            }
+          );
+
+
+        if (!response.ok) {
+          return;
+        }
+
+
+        const data =
+          await response.json();
+
+
+        const serverVersion =
+          String(
+            data.version || ''
+          );
+
+
+        const params =
+          new URLSearchParams(
+            window.location.search
+          );
+
+
+        const urlVersion =
+          params.get(
+            'v'
+          ) || '';
+
+
+        /*
+         * Если GitHub уже опубликовал новую версию,
+         * но браузер держит старый index.html,
+         * открываем этот же launcher с новым ?v=...
+         * Это заставляет браузер запросить новый документ.
+         */
+        if (
+          serverVersion &&
+          serverVersion !==
+            urlVersion
+        ) {
+
+          const nextUrl =
+            window.location.pathname +
+            '?v=' +
+            encodeURIComponent(
+              serverVersion
+            ) +
+            '&ts=' +
+            Date.now();
+
+
+          window.location.replace(
+            nextUrl
+          );
+
+
+          return new Promise(
+            () => {}
+          );
+        }
+
+      } catch (error) {
+
+        console.warn(
+          'SLS version check failed',
+          error
+        );
+      }
+    }
+
+
     function loadFreshSls() {
+
+      const separator =
+        APP_URL.includes('?')
+          ? '&'
+          : '?';
+
+
       frame.src =
         APP_URL +
-        '?sls_version=35_2&ts=' +
+        separator +
+        'sls_version=' +
+        encodeURIComponent(
+          LAUNCHER_VERSION
+        ) +
+        '&ts=' +
         Date.now();
     }
 
-    loadFreshSls();
+
+    async function startSlsLauncher() {
+
+      await ensureFreshLauncher();
+
+      loadFreshSls();
+    }
+
+
+    startSlsLauncher();
+
 
     const splash =
       document.getElementById('splash');
@@ -182,6 +319,24 @@
     function hideSplash() {
       splash.classList.add('hidden');
     }
+
+    function hardReloadLauncher() {
+
+      const url =
+        window.location.pathname +
+        '?v=' +
+        encodeURIComponent(
+          LAUNCHER_VERSION
+        ) +
+        '&force=' +
+        Date.now();
+
+
+      window.location.replace(
+        url
+      );
+    }
+
 
     frame.addEventListener(
       'load',
@@ -216,7 +371,8 @@
           hiddenAt &&
           Date.now() - hiddenAt > 15000
         ) {
-          loadFreshSls();
+
+          startSlsLauncher();
         }
       }
     );
