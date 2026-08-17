@@ -8,13 +8,13 @@
   "theme_color": "#09090A",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/slsrentalkz-glitch/sls-work-system/main/pwa/sls-icon-192.png",
+      "src": "https://raw.githubusercontent.com/slsrentalkz-glitch/SLS-pwa-assets/main/sls-icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://raw.githubusercontent.com/slsrentalkz-glitch/sls-work-system/main/pwa/sls-icon-512.png",
+      "src": "https://raw.githubusercontent.com/slsrentalkz-glitch/SLS-pwa-assets/main/sls-icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
