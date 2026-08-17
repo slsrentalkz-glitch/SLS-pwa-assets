@@ -155,7 +155,7 @@
 
   <iframe
     id="appFrame"
-    src="https://script.google.com/macros/s/AKfycbzpM52b7oy1dqKWaTiSPB8iHgpzBG9pa30m8KlZrXpllLYnbCs6tuGqE6srlJljamJq/exec"
+    src="about:blank"
     allow="clipboard-read; clipboard-write"
     referrerpolicy="no-referrer-when-downgrade"
   ></iframe>
@@ -163,6 +163,18 @@
   <script>
     const frame =
       document.getElementById('appFrame');
+
+    const APP_URL =
+      'https://script.google.com/macros/s/AKfycbzpM52b7oy1dqKWaTiSPB8iHgpzBG9pa30m8KlZrXpllLYnbCs6tuGqE6srlJljamJq/exec';
+
+    function loadFreshSls() {
+      frame.src =
+        APP_URL +
+        '?sls_version=35_2&ts=' +
+        Date.now();
+    }
+
+    loadFreshSls();
 
     const splash =
       document.getElementById('splash');
@@ -189,6 +201,26 @@
       hideSplash,
       6500
     );
+
+    let hiddenAt = 0;
+
+    document.addEventListener(
+      'visibilitychange',
+      () => {
+        if (document.visibilityState === 'hidden') {
+          hiddenAt = Date.now();
+          return;
+        }
+
+        if (
+          hiddenAt &&
+          Date.now() - hiddenAt > 15000
+        ) {
+          loadFreshSls();
+        }
+      }
+    );
+
   </script>
 
 </body>
