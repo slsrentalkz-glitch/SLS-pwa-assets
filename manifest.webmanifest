@@ -3,7 +3,7 @@
   "name": "SLS",
   "short_name": "SLS",
   "description": "SLS Work System · Crafted by Matua",
-  "start_url": "./index.html?v=35.4",
+  "start_url": "./index.html?v=35.5",
   "scope": "./",
   "display": "standalone",
   "background_color": "#080809",

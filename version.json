@@ -1,6 +1,10 @@
 {
-  "version": "35.4",
+  "version": "35.5",
   "updated": "2026-08-18",
-  "architecture": "direct-launcher",
-  "app": "SLS WORK SYSTEM"
+  "app": "SLS WORK SYSTEM",
+  "launcher": "standalone-iframe",
+  "supported_browsers": [
+    "Chrome",
+    "Safari"
+  ]
 }
