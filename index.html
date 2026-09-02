@@ -2,12 +2,10 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-
   <meta
     name="viewport"
     content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover"
   >
-
   <title>SLS</title>
 
   <meta name="application-name" content="SLS">
@@ -26,21 +24,26 @@
   <link rel="manifest" href="./manifest.webmanifest">
 
   <style>
-    * { box-sizing:border-box; }
-    html,body { position:fixed; inset:0; width:100%; max-width:100%; height:100%; margin:0; padding:0; overflow:hidden; background:#080809; }
-    body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; }
-    #splash { position:fixed; inset:0; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; padding-top:env(safe-area-inset-top); padding-bottom:env(safe-area-inset-bottom); background:radial-gradient(circle at 50% 30%,rgba(201,168,106,.16),transparent 36%),#080809; color:#e8d2a1; transition:opacity .28s ease,visibility .28s ease; }
-    #splash.hidden { opacity:0; visibility:hidden; pointer-events:none; }
-    .logo { width:min(42vw,180px); aspect-ratio:1; object-fit:cover; border-radius:26%; box-shadow:0 24px 70px rgba(0,0,0,.46),0 0 38px rgba(201,168,106,.10); }
-    .brand-main { padding-left:8px; text-align:center; font-size:24px; font-weight:900; letter-spacing:8px; }
-    .brand-sub { margin-top:8px; text-align:center; font-size:9px; font-weight:700; letter-spacing:3px; color:#a98d5a; }
-    .made { margin-top:5px; text-align:center; font-size:8px; letter-spacing:2px; color:#77736b; }
-    .loader { width:34px; height:34px; margin-top:6px; border-radius:50%; border:2px solid rgba(201,168,106,.18); border-top-color:#d5b36f; animation:spin .8s linear infinite; }
-    @keyframes spin { to { transform:rotate(360deg); } }
-    #appFrame { position:fixed; left:0; right:0; top:env(safe-area-inset-top); bottom:env(safe-area-inset-bottom); display:block; width:100%; max-width:100%; height:auto; border:0; margin:0; padding:0; background:#080809; }
+    *{box-sizing:border-box}
+    html,body{position:fixed;inset:0;width:100%;height:100%;margin:0;padding:0;overflow:hidden;background:#080809;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+    #splash{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);background:radial-gradient(circle at 50% 30%,rgba(201,168,106,.16),transparent 36%),#080809;color:#e8d2a1;transition:opacity .28s ease,visibility .28s ease}
+    #splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
+    .logo{width:min(42vw,180px);aspect-ratio:1;object-fit:cover;border-radius:26%;box-shadow:0 24px 70px rgba(0,0,0,.46),0 0 38px rgba(201,168,106,.10)}
+    .brand-main{padding-left:8px;text-align:center;font-size:24px;font-weight:900;letter-spacing:8px}
+    .brand-sub{margin-top:8px;text-align:center;font-size:9px;font-weight:700;letter-spacing:3px;color:#a98d5a}
+    .made{margin-top:5px;text-align:center;font-size:8px;letter-spacing:2px;color:#77736b}
+    .loader{width:34px;height:34px;margin-top:6px;border-radius:50%;border:2px solid rgba(201,168,106,.18);border-top-color:#d5b36f;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    #appFrame{position:fixed;left:0;right:0;top:env(safe-area-inset-top);bottom:calc(68px + env(safe-area-inset-bottom));display:block;width:100%;max-width:100%;height:auto;border:0;margin:0;padding:0;background:#080809}
+    #launcherNav{position:fixed;left:8px;right:8px;bottom:max(6px,env(safe-area-inset-bottom));z-index:50;height:58px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;padding:4px 6px;border:1px solid rgba(201,168,106,.18);border-radius:18px;background:rgba(10,10,11,.985);box-shadow:0 8px 28px rgba(0,0,0,.52);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+    .launcher-nav-item{min-width:0;height:50px;border:0;background:transparent;color:#858585;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:1px 0;font-size:6.7px;line-height:1.05}
+    .launcher-nav-item.active{color:#d4b06a}
+    .launcher-nav-icon{font-size:16px;line-height:1}
+    .launcher-nav-item.work .launcher-nav-icon{width:34px;height:34px;margin-top:-7px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#d4b06a;color:#111;font-size:21px;font-weight:900;box-shadow:0 7px 18px rgba(185,144,78,.20)}
   </style>
 </head>
 <body>
+
   <div id="splash">
     <img class="logo" src="./sls-icon-512.png" alt="SLS">
     <div>
@@ -51,20 +54,51 @@
     <div class="loader"></div>
   </div>
 
-  <iframe id="appFrame" src="about:blank" allow="clipboard-read; clipboard-write" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  <iframe
+    id="appFrame"
+    src="about:blank"
+    allow="clipboard-read; clipboard-write"
+    referrerpolicy="no-referrer-when-downgrade"
+  ></iframe>
+
+  <nav id="launcherNav">
+    <button class="launcher-nav-item active" data-page="homePage">
+      <span class="launcher-nav-icon">⌂</span>
+      <span>Главная</span>
+    </button>
+
+    <button class="launcher-nav-item" data-page="calendarPage">
+      <span class="launcher-nav-icon">◫</span>
+      <span>Мероприятия</span>
+    </button>
+
+    <button class="launcher-nav-item work" data-page="workPage">
+      <span class="launcher-nav-icon">+</span>
+      <span>Работа</span>
+    </button>
+
+    <button class="launcher-nav-item" data-page="financePage">
+      <span class="launcher-nav-icon">₸</span>
+      <span>Начисления</span>
+    </button>
+
+    <button class="launcher-nav-item" data-page="profilePage">
+      <span class="launcher-nav-icon">○</span>
+      <span>Профиль</span>
+    </button>
+  </nav>
 
   <script>
     const APP_URL='https://script.google.com/macros/s/AKfycbzpM52b7oy1dqKWaTiSPB8iHgpzBG9pa30m8KlZrXpllLYnbCs6tuGqE6srlJljamJq/exec';
-    const APP_VERSION='42.4-launcher';
+    const APP_VERSION='42.7-launcher-nav';
     const frame=document.getElementById('appFrame');
     const splash=document.getElementById('splash');
+    const navItems=Array.from(document.querySelectorAll('.launcher-nav-item'));
 
     function sizeFrame(){
       const width=window.visualViewport?window.visualViewport.width:window.innerWidth;
-      const height=window.visualViewport?window.visualViewport.height:window.innerHeight;
       frame.style.width=Math.round(width)+'px';
       frame.style.maxWidth=Math.round(width)+'px';
-      frame.style.height=Math.round(height)+'px';
     }
 
     function loadFreshSls(){
@@ -75,8 +109,17 @@
 
     function hideSplash(){ splash.classList.add('hidden'); }
 
+    function navigateApp(page){
+      frame.contentWindow.postMessage({type:'SLS_NAVIGATE',page:page},'*');
+      navItems.forEach(item=>{item.classList.toggle('active',item.dataset.page===page);});
+    }
+
+    navItems.forEach(item=>{
+      item.addEventListener('click',()=>{navigateApp(item.dataset.page);});
+    });
+
     window.addEventListener('resize',sizeFrame);
-    if(window.visualViewport){ window.visualViewport.addEventListener('resize',sizeFrame); }
+    if(window.visualViewport){window.visualViewport.addEventListener('resize',sizeFrame);}
 
     frame.addEventListener('load',()=>{
       sizeFrame();
@@ -92,10 +135,11 @@
         return;
       }
       sizeFrame();
-      if(hiddenAt&&Date.now()-hiddenAt>30000){ loadFreshSls(); }
+      if(hiddenAt&&Date.now()-hiddenAt>30000){loadFreshSls();}
     });
 
     setTimeout(hideSplash,6500);
   </script>
+
 </body>
 </html>
